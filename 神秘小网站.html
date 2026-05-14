@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成人用品娱乐配置生成器 | 仅供娱乐参考</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px 16px;
+            margin: 20px auto;
+            max-width: 900px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #856404;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            background: white;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: #666;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: #764ba2;
+            border-bottom-color: #764ba2;
+            background: #fafafa;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        .panel {
+            display: none;
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .result-box {
+            margin-top: 24px;
+            padding: 24px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border: 1px solid #e0e4ff;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            color: #764ba2;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0e4ff;
+        }
+
+        .item-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .item {
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            border-left: 3px solid #667eea;
+        }
+
+        .item.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .item-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .item-value {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .highlight {
+            color: #e63946;
+            font-size: 1.1rem;
+        }
+
+        .score-section {
+            margin-top: 16px;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .score-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .score-label {
+            width: 80px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .score-track {
+            flex: 1;
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 0 10px;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 6px;
+            transition: width 1s ease;
+        }
+
+        .score-num {
+            width: 30px;
+            text-align: right;
+            font-weight: 700;
+            color: #764ba2;
+        }
+
+        .price-tag {
+            font-size: 1.5rem;
+            color: #e63946;
+            font-weight: 800;
+            text-align: center;
+            margin: 16px 0;
+            padding: 12px;
+            background: #fff0f0;
+            border-radius: 8px;
+            border: 1px dashed #e63946;
+        }
+
+        .reviews {
+            margin-top: 16px;
+        }
+
+        .review-card {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #eee;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .review-star {
+            color: #ffc107;
+            letter-spacing: 2px;
+        }
+
+        .review-text {
+            color: #444;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #e0e4ff;
+            color: #764ba2;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            color: #555;
+            margin: 16px 0 8px;
+            font-weight: 600;
+        }
+
+        .divider {
+            height: 1px;
+            background: #eee;
+            margin: 16px 0;
+        }
+
+        @media (max-width: 600px) {
+            .item-grid, .form-row {
+                grid-template-columns: 1fr;
+            }
+            .header h1 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>🔞 成人用品娱乐配置生成器</h1>
+    <p>基于输入参数的智能模拟生成 · 仅供娱乐参考</p>
+</div>
+
+<div class="warning-box">
+    <strong>提示：</strong>本工具为18岁以上成人娱乐用途设计，生成的数据为算法模拟结果，不构成任何购买建议或医学参考。请理性对待，遵守法律法规。
+</div>
+
+<div class="container">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('dildo')">假阳具配置</button>
+        <button class="tab-btn" onclick="switchTab('onahole')">名器配置</button>
+    </div>
+
+    <!-- 假阳具面板 -->
+    <div id="panel-dildo" class="panel active">
+        <h2 style="margin-bottom:16px;color:#764ba2;">假阳具参数输入</h2>
+        <div class="form-row">
+            <div class="form-group">
+                <label>身高 (cm)</label>
+                <input type="number" id="d-height" value="175" min="140" max="220">
+            </div>
+            <div class="form-group">
+                <label>体重 (kg)</label>
+                <input type="number" id="d-weight" value="70" min="40" max="150">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>实际阴茎长度 (cm)</label>
+                <input type="number" id="d-len" value="14" min="5" max="25" step="0.1">
+            </div>
+            <div class="form-group">
+                <label>实际阴茎直径 (cm)</label>
+                <input type="number" id="d-dia" value="3.5" min="2" max="6" step="0.1">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>龟头周长 (cm)</label>
+            <input type="number" id="d-glans" value="10" min="5" max="15" step="0.1">
+        </div>
+        <button class="btn-primary" onclick="generateDildo()">🚀 生成假阳具配置</button>
+
+        <div id="dildo-result" class="result-box">
+            <!-- JS填充 -->
+        </div>
+    </div>
+
+    <!-- 名器面板 -->
+    <div id="panel-onahole" class="panel">
+        <h2 style="margin-bottom:16px;color:#764ba2;">名器参数输入</h2>
+        <div class="form-group">
+            <label>产品类型</label>
+            <select id="o-type" onchange="toggleOnaholeOptions()">
+                <option value="全身">全身</option>
+                <option value="半身">半身</option>
+                <option value="阴臀模">阴臀模</option>
+                <option value="阴模">阴模</option>
+            </select>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>身高 (cm)</label>
+                <input type="number" id="o-height" value="160" min="130" max="190">
+            </div>
+            <div class="form-group">
+                <label>体重 (kg)</label>
+                <input type="number" id="o-weight" value="55" min="35" max="100">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>胸围 (cm)</label>
+                <input type="number" id="o-bust" value="86" min="60" max="120">
+            </div>
+            <div class="form-group">
+                <label>腰围 (cm)</label>
+                <input type="number" id="o-waist" value="62" min="50" max="100">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>臀围 (cm)</label>
+            <input type="number" id="o-hip" value="88" min="60" max="120">
+        </div>
+        <button class="btn-primary" onclick="generateOnahole()">🚀 生成名器配置</button>
+
+        <div id="onahole-result" class="result-box">
+            <!-- JS填充 -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // 工具函数
+    function switchTab(name) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        
+        if(name === 'dildo') {
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            document.getElementById('panel-dildo').classList.add('active');
+        } else {
+            document.querySelectorAll('.tab-btn')[1].classList.add('active');
+            document.getElementById('panel-onahole').classList.add('active');
+        }
+    }
+
+    function randomPick(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function randomFloat(min, max, dec=1) {
+        return (Math.random() * (max - min) + min).toFixed(dec);
+    }
+
+    // ==================== 假阳具生成逻辑 ====================
+    function generateDildo() {
+        const height = parseFloat(document.getElementById('d-height').value);
+        const weight = parseFloat(document.getElementById('d-weight').value);
+        const actualLen = parseFloat(document.getElementById('d-len').value);
+        const actualDia = parseFloat(document.getElementById('d-dia').value);
+        const glansCirc = parseFloat(document.getElementById('d-glans').value);
+
+        // 核心算法
+        const theoreticalLen = (height - 105) * 0.618 / 3.14;
+        const finalLen = (actualLen * 0.8 + theoreticalLen * 0.2).toFixed(2);
+        const theoreticalDia = theoreticalLen / Math.PI;
+        const finalDia = (actualDia * 0.8 + theoreticalDia * 0.2).toFixed(2);
+        const glansDia = (glansCirc / Math.PI).toFixed(2);
+
+        // 随机属性
+        const sideView = randomPick(['正常', '上翘', '下垂']);
+        const topView = randomPick(['正常', '左偏', '右偏']);
+        const hardness = randomPick(['半勃起', '完全勃起']);
+        const material = randomPick(['软质硅胶', '硬质ABS', '双层软胶', '液态硅胶']);
+        const glansState = randomPick(['仿真包茎', '裸露龟头']);
+        const texture = randomPick(['光滑镜面', '青筋凸起', '螺旋纹路', '颗粒摩檫面', '仿生静脉']);
+        const heating = randomPick(['无加热', 'USB恒温加热']);
+        const fixMethod = randomPick(['强力吸盘', '手持型', '炮机接口专用']);
+        const pubicHair = randomPick(['无毛', '仿真阴毛植绒']);
+        const veins = randomPick(['无青筋', '逼真青筋纹理']);
+        // 操作方式与固定联动：若炮机则操作方式为炮机
+        let operation = randomPick(['手动', '电动震动', '炮机']);
+        let realFix = fixMethod;
+        if (fixMethod === '炮机接口专用') operation = '炮机';
+        
+        const bead = randomPick(['无入珠', '内置快感珠']);
+
+        // 价格估算算法
+        let price = 80;
+        price += finalLen * 8;
+        price += finalDia * 15;
+        if(heating.includes('加热')) price += 60;
+        if(operation === '炮机') price += 180;
+        else if(operation === '电动震动') price += 90;
+        if(fixMethod === '强力吸盘') price += 30;
+        if(material.includes('双层') || material.includes('液态')) price += 50;
+        if(texture !== '光滑镜面') price += 20;
+        price = Math.floor(price + Math.random() * 50);
+
+        // 三维评分
+        let stimulation = randomInt(6, 10);
+        let durability = randomInt(5, 9);
+        let ease = randomInt(6, 10);
+        if(operation === '手动') ease = Math.min(10, ease + 1);
+        if(material.includes('硬质')) durability = Math.min(10, durability + 1);
+
+        // 生成评价
+        const reviews = generateDildoReviews(price, finalLen, operation, heating, stimulation);
+
+        // 渲染
+        const html = `
+            <div class="result-title">📊 假阳具生成报告</div>
+            <div class="item-grid">
+                <div class="item"><span class="item-label">理论长度</span><span class="item-value">${theoreticalLen.toFixed(2)} cm</span></div>
+                <div class="item"><span class="item-label">生成长度</span><span class="item-value highlight">${finalLen} cm</span></div>
+                <div class="item"><span class="item-label">理论直径</span><span class="item-value">${theoreticalDia.toFixed(2)} cm</span></div>
+                <div class="item"><span class="item-label">生成直径</span><span class="item-value highlight">${finalDia} cm</span></div>
+                <div class="item"><span class="item-label">龟头周长</span><span class="item-value">${glansCirc} cm</span></div>
+                <div class="item"><span class="item-label">等效龟头直径</span><span class="item-value">${glansDia} cm</span></div>
+            </div>
+
+            <div class="section-title">🎲 随机属性</div>
+            <div class="item-grid">
+                <div class="item"><span class="item-label">侧视状态</span><span class="item-value">${sideView}</span></div>
+                <div class="item"><span class="item-label">俯视状态</span><span class="item-value">${topView}</span></div>
+                <div class="item"><span class="item-label">硬度模拟</span><span class="item-value">${hardness}</span></div>
+                <div class="item"><span class="item-label">材质</span><span class="item-value">${material}</span></div>
+                <div class="item"><span class="item-label">龟头状态</span><span class="item-value">${glansState}</span></div>
+                <div class="item"><span class="item-label">表面肌理</span><span class="item-value">${texture}</span></div>
+                <div class="item"><span class="item-label">加热功能</span><span class="item-value">${heating}</span></div>
+                <div class="item"><span class="item-label">固定方式</span><span class="item-value">${realFix}</span></div>
+                <div class="item"><span class="item-label">阴毛</span><span class="item-value">${pubicHair}</span></div>
+                <div class="item"><span class="item-label">青筋</span><span class="item-value">${veins}</span></div>
+                <div class="item"><span class="item-label">操作方式</span><span class="item-value">${operation}</span></div>
+                <div class="item"><span class="item-label">入珠</span><span class="item-value">${bead}</span></div>
+            </div>
+
+            <div class="price-tag">参考价位：¥${price}</div>
+
+            <div class="section-title">⭐ 多维度评分</div>
+            <div class="score-section">
+                <div class="score-bar">
+                    <div class="score-label">刺激度</div>
+                    <div class="score-track"><div class="score-fill" style="width:${stimulation*10}%"></div></div>
+                    <div class="score-num">${stimulation}</div>
+                </div>
+                <div class="score-bar">
+                    <div class="score-label">耐用度</div>
+                    <div class="score-track"><div class="score-fill" style="width:${durability*10}%"></div></div>
+                    <div class="score-num">${durability}</div>
+                </div>
+                <div class="score-bar">
+                    <div class="score-label">易用度</div>
+                    <div class="score-track"><div class="score-fill" style="width:${ease*10}%"></div></div>
+                    <div class="score-num">${ease}</div>
+                </div>
+            </div>
+
+            <div class="section-title">💬 模拟用户评价</div>
+            <div class="reviews">${reviews}</div>
+        `;
+        
+        const box = document.getElementById('dildo-result');
+        box.innerHTML = html;
+        box.classList.add('show');
+    }
+
+    function generateDildoReviews(price, finalLen, operation, heating, stimulation) {
+        const templates = [
+            {stars:5, text:`尺寸很合适，长度${finalLen}cm刚刚顶到最深处，${heating.includes('加热')?'加热升温很快，冬天不怕凉':'虽然没有加热但手感很好'}，材质柔软度适中，非常推荐！`},
+            {stars:5, text:`${operation === '炮机'?'炮机接口很稳固，解放双手神器':'手持部分握感很好，不会滑脱'}。表面仿真纹理细腻，${stimulation >= 8 ? '刺激度拉满，不一会儿就顶不住了':'属于慢玩型，可以尽情享受'}。`},
+            {stars:4, text:`整体做工精致，无异味，这个价位性价比很高。吸盘在瓷砖上很牢固，浴室也能愉快玩耍。`},
+            {stars:5, text:`包装私密性很好，物流没有任何敏感信息。实际尺寸和描述一致，软硬度刚好，爱了。`},
+            {stars:4, text:`${finalLen > 16 ? '长度感人，适合追求充实感的老司机':'小巧灵活，新手入门无压力'}。清洗方便，用水冲冲就干净了，保养简单。`},
+            {stars:5, text:`仿真度真的高，尤其是龟头细节很到位。${heating.includes('加热')?'加热到37度体感超真实，仿佛真的一样':''}用了几次质量也没问题。`}
+        ];
+        
+        let html = '';
+        templates.forEach(r => {
+            const starStr = '★'.repeat(r.stars) + '☆'.repeat(5-r.stars);
+            html += `<div class="review-card">
+                <div class="review-header">
+                    <span class="review-star">${starStr}</span>
+                    <span>匿名用户 · 已购用户</span>
+                </div>
+                <div class="review-text">${r.text}</div>
+            </div>`;
+        });
+        return html;
+    }
+
+    // ==================== 名器生成逻辑 ====================
+    function generateOnahole() {
+        const type = document.getElementById('o-type').value;
+        const height = parseFloat(document.getElementById('o-height').value);
+        const weight = parseFloat(document.getElementById('o-weight').value);
+        const bust = parseFloat(document.getElementById('o-bust').value);
+        const waist = parseFloat(document.getElementById('o-waist').value);
+        const hip = parseFloat(document.getElementById('o-hip').value);
+
+        // 深度算法：基于身高与类型
+        let depthBase = height * 0.12;
+        if(type === '阴模') depthBase *= 0.9;
+        else if(type === '阴臀模') depthBase *= 1.0;
+        else if(type === '半身') depthBase *= 1.1;
+        else depthBase *= 1.2;
+        
+        const vagDepth = (depthBase + Math.random()*2).toFixed(1);
+        const analDepth = type === '阴模' ? '0' : (depthBase * 0.95).toFixed(1);
+        
+        const tightness = randomPick(['高', '中', '低']);
+        const hymen = type === '阴模' ? randomPick(['有仿真处女膜阻碍','无']) : randomPick(['有','无']);
+        const vibration = randomPick(['有','无']);
+        const heating = randomPick(['有','无']);
+        const skeleton = (type === '阴模' || type === '阴臀模') ? '无' : randomPick(['有金属骨架支撑','无']);
+        const vaginaShape = randomPick(['仿真蝴蝶型','一线天','饱满馒头型','写实外翻']);
+        const hasPubicHair = randomPick(['有','无']);
+        const outfit = (type === '全身' || type === '半身') ? randomPick(['附赠情趣内衣','无衣物']) : '无衣物';
+        const jelly = (type === '全身' || type === '半身') ? randomPick(['果冻胸/臀加持','普通填充']) : '普通填充';
+        const material = randomPick(['TPE亲肤材质','医用级硅胶','双重材质复合']);
+        const wetness = randomPick(['低','中','高']);
+
+        // 通道细节
+        const vagSystem = `入口${randomPick(['紧窄','宽松'])}/主干${randomPick(['颗粒','螺纹','平滑'])}/内壁${randomPick(['密集颗粒','仿真褶皱','G点凸点'])}/子宫${randomPick(['有','无'])}宫颈/拔出${randomPick(['强真空吸附','普通'])}`;
+        const analSystem = type === '阴模' ? '不适用' : `括约肌${randomPick(['极强阻力','适中'])}/肠壁${randomPick(['九曲回肠','笔直简易'])}/盲端${randomPick(['凸起刺激','平直'])}`;
+
+        // 价格估运算
+        let price = 120;
+        if(type === '半身') price += 300;
+        if(type === '全身') price += 800;
+        if(type === '阴臀模') price += 150;
+        if(skeleton === '有金属骨架支撑') price += 250;
+        if(jelly.includes('果冻')) price += 150;
+        if(vibration === '有') price += 100;
+        if(heating === '有') price += 80;
+        if(material.includes('硅胶')) price += 100;
+        price += (bust + waist + hip) / 10;
+        price = Math.floor(price + Math.random() * 80);
+
+        // 四维评分
+        let stimulation = randomInt(5, 10);
+        let wrapping = randomInt(6, 10);
+        let realism = randomInt(6, 10);
+        let cleaning = randomInt(5, 9);
+        if(tightness === '高') stimulation = Math.min(10, stimulation + 1);
+        if(jelly.includes('果冻')) { wrapping += 1; realism += 1; }
+        if(type === '阴模') cleaning = Math.min(10, cleaning + 1);
+
+        // 评价
+        const reviews = generateOnaholeReviews(type, tightness, jelly, material, stimulation);
+
+        const html = `
+            <div class="result-title">📊 名器生成报告</div>
+            <div class="item-grid">
+                <div class="item"><span class="item-label">类型</span><span class="item-value">${type}</span></div>
+                <div class="item"><span class="item-label">参考身高</span><span class="item-value">${height} cm</span></div>
+                <div class="item"><span class="item-label">参考体重</span><span class="item-value">${weight} kg</span></div>
+                <div class="item"><span class="item-label">三围</span><span class="item-value">${bust}-${waist}-${hip}</span></div>
+            </div>
+
+            <div class="section-title">🎲 随机属性</div>
+            <div class="item-grid">
+                <div class="item"><span class="item-label">阴道深度</span><span class="item-value">${vagDepth} cm</span></div>
+                <div class="item"><span class="item-label">肛门深度</span><span class="item-value">${analDepth} cm</span></div>
+                <div class="item"><span class="item-label">紧致度</span><span class="item-value">${tightness}</span></div>
+                <div class="item"><span class="item-label">处女膜</span><span class="item-value">${hymen}</span></div>
+                <div class="item"><span class="item-label">震动</span><span class="item-value">${vibration}</span></div>
+                <div class="item"><span class="item-label">加热</span><span class="item-value">${heating}</span></div>
+                <div class="item"><span class="item-label">金属骨架</span><span class="item-value">${skeleton}</span></div>
+                <div class="item"><span class="item-label">阴道口</span><span class="item-value">${vaginaShape}</span></div>
+                <div class="item"><span class="item-label">阴毛</span><span class="item-value">${hasPubicHair}</span></div>
+                <div class="item"><span class="item-label">情趣衣物</span><span class="item-value">${outfit}</span></div>
+                <div class="item"><span class="item-label">果冻填充</span><span class="item-value">${jelly}</span></div>
+                <div class="item"><span class="item-label">材质</span><span class="item-value">${material}</span></div>
+                <div class="item full-width"><span class="item-label">水润程度</span><span class="item-value">${wetness}</span></div>
+            </div>
+
+            <div class="section-title">🔬 通道细节</div>
+            <div class="item-grid">
+                <div class="item full-width"><span class="item-label">阴道系统</span><span class="item-value" style="text-align:right;font-size:0.85rem;">${vagSystem}</span></div>
+                <div class="item full-width"><span class="item-label">肛门系统</span><span class="item-value" style="text-align:right;font-size:0.85rem;">${analSystem}</span></div>
+            </div>
+
+            <div class="price-tag">参考价位：¥${price}</div>
+
+            <div class="section-title">⭐ 多维度评分</div>
+            <div class="score-section">
+                <div class="score-bar">
+                    <div class="score-label">刺激度</div>
+                    <div class="score-track"><div class="score-fill" style="width:${stimulation*10}%"></div></div>
+                    <div class="score-num">${stimulation}</div>
+                </div>
+                <div class="score-bar">
+                    <div class="score-label">包裹度</div>
+                    <div class="score-track"><div class="score-fill" style="width:${wrapping*10}%"></div></div>
+                    <div class="score-num">${wrapping}</div>
+                </div>
+                <div class="score-bar">
+                    <div class="score-label">真实度</div>
+                    <div class="score-track"><div class="score-fill" style="width:${realism*10}%"></div></div>
+                    <div class="score-num">${realism}</div>
+                </div>
+                <div class="score-bar">
+                    <div class="score-label">易清洁</div>
+                    <div class="score-track"><div class="score-fill" style="width:${cleaning*10}%"></div></div>
+                    <div class="score-num">${cleaning}</div>
+                </div>
+            </div>
+
+            <div class="section-title">💬 模拟用户评价</div>
+            <div class="reviews">${reviews}</div>
+        `;
+
+        const box = document.getElementById('onahole-result');
+        box.innerHTML = html;
+        box.classList.add('show');
+    }
+
+    function generateOnaholeReviews(type, tightness, jelly, material, stimulation) {
+        const texts = [
+            `入手的是${type}款，${tightness === '高' ? '紧致度惊人，进去就被死死咬住' : '包裹感温柔，适合长时间享受'}。${jelly.includes('果冻') ? '果冻胸捏起来手感绝了，像真的一样' : '触感细腻'}，${stimulation >= 8 ? '刺激度很高，没几分钟就缴械' : '属于慢玩神器，可以慢慢品味'}。`,
+            `${material}没有异味，出油也不多，保养起来比较省心。通道内壁纹理做得很精致，不敷衍。`,
+            `清洗的话${type === '阴模'?'因为是单通道所以很容易':'双通道稍微麻烦点，但配了清洗棒还行'}，擦干后拍点粉，下次用还是滑溜溜的。`,
+            `整体性价比很高，外观仿真度不错，腰臀比例很养眼。${tightness === '高' ? '老司机绝对喜欢这种榨汁感' : '新手友好，不会被秒掉'}，推荐！`
+        ];
+        let html = '';
+        const stars = [5,5,4,5];
+        texts.forEach((t,i) => {
+            const starStr = '★'.repeat(stars[i]) + '☆'.repeat(5-stars[i]);
+            html += `<div class="review-card">
+                <div class="review-header">
+                    <span class="review-star">${starStr}</span>
+                    <span>匿名用户 · 已购用户</span>
+                </div>
+                <div class="review-text">${t}</div>
+            </div>`;
+        });
+        return html;
+    }
+
+    function toggleOnaholeOptions() {
+        // 可选：根据类型动态调整输入，目前页面逻辑自动处理
+    }
+</script>
+
+</body>
+</html>
